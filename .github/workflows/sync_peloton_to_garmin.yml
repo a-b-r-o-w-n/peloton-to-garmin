@@ -15,7 +15,7 @@ on:
         type: boolean
         default: false
       format:
-        description: "File type to generate. Options are: 'fit', 'tcx', 'json'"
+        description: File Format to generate
         type: choice
         default: fit
         options:
@@ -23,7 +23,7 @@ on:
           - tcx
           - json
       uploadToGarmin:
-        description: Upload results to Garmin
+        description: Upload results to Garmin?
         type: boolean
         default: true
   schedule:
@@ -57,9 +57,9 @@ jobs:
               "EnablePolling": false
             },
             "Format": {
-              "Fit": ${{ github.event.inputs.format == "fit" }},
-              "Json": ${{ github.event.inputs.format == "json" }},
-              "Tcx": ${{ github.event.inputs.format == "tcx" }},
+              "Fit": ${{ github.event.inputs.format == 'fit' }},
+              "Json": ${{ github.event.inputs.format == 'json' }},
+              "Tcx": ${{ github.event.inputs.format == 'tcx' }},
               "SaveLocalCopy": ${{ github.event.inputs.saveLocalCopy || false }},
               "IncludeTimeInHRZones": false,
               "IncludeTimeInPowerZones": false,
