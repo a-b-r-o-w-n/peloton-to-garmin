@@ -7,11 +7,25 @@ on:
   workflow_dispatch:
     inputs:
       workoutsToDownload:
+        description: Number of workouts to download from Peloton
         type: number
-        default: "5"
+        default: 5
       saveLocalCopy:
+        description: Save outputs to build artifacts
         type: boolean
         default: false
+      format:
+        description: "File type to generate. Options are: 'fit', 'tcx', 'json'"
+        type: choice
+        default: fit
+        options:
+          - fit
+          - tcx
+          - json
+      uploadToGarmin:
+        description: Upload results to Garmin
+        type: boolean
+        default: true
   schedule:
     - cron: "0 1 * * *"
 
@@ -43,9 +57,9 @@ jobs:
               "EnablePolling": false
             },
             "Format": {
-              "Fit": true,
-              "Json": false,
-              "Tcx": false,
+              "Fit": ${{ github.event.inputs.format == "fit" }},
+              "Json": ${{ github.event.inputs.format == "json" }},
+              "Tcx": ${{ github.event.inputs.format == "tcx" }},
               "SaveLocalCopy": ${{ github.event.inputs.saveLocalCopy || false }},
               "IncludeTimeInHRZones": false,
               "IncludeTimeInPowerZones": false,
@@ -55,8 +69,8 @@ jobs:
               "NumWorkoutsToDownload": ${{ github.event.inputs.workoutsToDownload || env.DEFAULT_WORKOUT_NUM }},
             },
             "Garmin": {
-              "Upload": true,
-              "FormatToUpload": "fit"
+              "Upload": ${{ github.event.inputs.uploadToGarmin || true }},
+              "FormatToUpload": ${{ github.event.inputs.format || "fit" }}
             },
             "Observability": {
               "Prometheus": {
