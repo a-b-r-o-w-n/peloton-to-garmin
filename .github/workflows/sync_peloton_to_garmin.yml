@@ -70,7 +70,7 @@ jobs:
             },
             "Garmin": {
               "Upload": ${{ github.event.inputs.uploadToGarmin || true }},
-              "FormatToUpload": ${{ github.event.inputs.format || "fit" }}
+              "FormatToUpload": ${{ github.event.inputs.format || 'fit' }}
             },
             "Observability": {
               "Prometheus": {
